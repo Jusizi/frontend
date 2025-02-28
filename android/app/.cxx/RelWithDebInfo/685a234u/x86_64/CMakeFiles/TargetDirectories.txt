@@ -1,0 +1,2 @@
+/home/github/appjusizi/android/app/.cxx/RelWithDebInfo/685a234u/x86_64/CMakeFiles/edit_cache.dir
+/home/github/appjusizi/android/app/.cxx/RelWithDebInfo/685a234u/x86_64/CMakeFiles/rebuild_cache.dir

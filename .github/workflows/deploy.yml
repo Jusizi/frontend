@@ -1,0 +1,85 @@
+name: Build and Deploy Flutter Web
+
+on:
+  push:
+    branches:
+      - main       # Deploy para produção
+      - develop    # Deploy para staging
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Verifica o código do repositório
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      # Configura o Flutter no ambiente
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.29.0'
+
+      # Configura o cache das dependências
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-flutter-${{ hashFiles('pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      # Instala dependências do Flutter
+      - name: Install dependencies
+        run: flutter pub get
+
+      # Verifica a qualidade do código
+      - name: Analyze code with Flutter Analyzer
+        run: flutter analyze
+
+      # Executa os testes automatizados
+      - name: Run Flutter tests
+        run: flutter test
+
+      # Realiza o build para web (apenas se os testes passarem)
+      - name: Build Flutter web
+        run: flutter build web --release --no-tree-shake-icons \
+          --dart-define=baseUrlAPI=${{ secrets.BASE_URL_API }} \
+          --dart-define=baseUrlAUTH=${{ secrets.BASE_URL_AUTH }}/
+        if: success()
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+
+      # Limpar cache do Cloudflare (CDN + DNS)
+      - name: Clear Cloudflare Cache (CDN + DNS)
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          -d '{"purge_everything":true}'
+
+      # Envia notificação ao Discord (Sucesso)
+      - name: Notify success
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+          -d '{"content": "✅ Deploy realizado com sucesso no GitHub pages!"}' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # Envia notificação ao Discord (Falha)
+      - name: Notify failure
+        if: failure()
+        run: |
+          if [ -s $GITHUB_WORKSPACE/build.log ]; then
+            error_output=$(cat $GITHUB_WORKSPACE/build.log)
+          else
+            error_output="Log indisponível ou vazio."
+          fi
+          curl -X POST -H "Content-Type: application/json" \
+          -d "{\"content\": \"❌ Deploy falhou. Verifique os logs!\n\nSaída do erro:\n$error_output\"}" \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}

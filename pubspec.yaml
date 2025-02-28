@@ -1,0 +1,65 @@
+name: appjusizi
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+dependencies:
+  flutter_localizations:
+    sdk: flutter 
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  cupertino_icons: 
+  flutter_native_splash: 
+  flutter_modular: 
+  flutter_triple: 
+  dio: 
+  shared_preferences: 
+  brasil_fields: 
+  flex_color_scheme: 
+  firebase_messaging: 
+  firebase_auth: 
+  firebase_core: 
+  fl_chart: 
+  file_picker: 
+  syncfusion_flutter_pdfviewer: 
+  searchable_listview: 
+  url_launcher: 
+  intl: 
+  flutter_localization: 
+  flutter_typeahead: 
+  app_links: 
+  font_awesome_flutter: 
+  path_provider: 
+  syncfusion_flutter_calendar: 
+  syncfusion_localizations: 
+  local_auth: 
+dev_dependencies:
+  flutter_launcher_icons: 
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/fonts/
+    - assets/icons/bancos/
+
+  fonts:
+    - family: Ubuntu
+      fonts:
+        - asset: assets/fonts/UbuntuMono-Regular.ttf
+        - asset: assets/fonts/UbuntuMono-Bold.ttf
+        - asset: assets/fonts/UbuntuMono-Italic.ttf
+        - asset: assets/fonts/UbuntuMono-BoldItalic.ttf
+          weight: 700
+    - family: NotoSans
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf
+        - asset: assets/fonts/NotoSans-Bold.ttf
+          weight: 700
