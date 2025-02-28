@@ -42,17 +42,6 @@ jobs:
       - name: Run Flutter tests
         run: flutter test
 
-      # Realiza o build para web (apenas se os testes passarem)
-      - name: Build Flutter web
-        run: flutter build web --release --no-tree-shake-icons --dart-define=baseUrlAPI=${{ secrets.BASE_URL_API }} --dart-define=baseUrlAUTH=${{ secrets.BASE_URL_AUTH }}/
-        if: success()
-        
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./build/web
-
       # Limpar cache do Cloudflare (CDN + DNS)
       - name: Clear Cloudflare Cache (CDN + DNS)
         run: |

@@ -8,7 +8,9 @@
 .buildlog/
 .history
 .svn/
-build/
+/build/*
+!/build/web/
+
 migrate_working_dir/
 pubspec.lock
 .metadata
