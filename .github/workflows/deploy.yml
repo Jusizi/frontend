@@ -44,7 +44,7 @@ jobs:
 
       # Realiza o build para web (apenas se os testes passarem)
       - name: Build Flutter web
-        run: flutter build web --release --no-tree-shake-icons
+        run: flutter build web --release --no-tree-shake-icons --dart-define=baseUrlAPI=${{ secrets.BASE_URL_API }} --dart-define=baseUrlAUTH=${{ secrets.BASE_URL_AUTH }}
         if: success()
 
       # Configura a chave SSH
