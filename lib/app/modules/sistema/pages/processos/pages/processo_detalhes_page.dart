@@ -147,22 +147,29 @@ class _ProcessoDetalhesPageState extends State<ProcessoDetalhesPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: TextButton.icon(
-                          onPressed: () {
-                            Modular.to.pushNamed(
-                              '/sistema/processos/detalhe/${processo.codigo}/movimentacoes',
-                              arguments: processo,
-                            );
-                          },
-                          label: Text(
-                              "Ver as ${processo.movimentacoes.length} movimentações"),
-                          icon: const Icon(Icons.list_rounded),
+                      Visibility(
+                        visible: processo.movimentacoes.length > 2,
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.center,
+                              child: TextButton.icon(
+                                onPressed: () {
+                                  Modular.to.pushNamed(
+                                    '/sistema/processos/detalhe/${processo.codigo}/movimentacoes',
+                                    arguments: processo,
+                                  );
+                                },
+                                label: Text(
+                                    "Ver as ${processo.movimentacoes.length} movimentações"),
+                                icon: const Icon(Icons.list_rounded),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
                       ),
                     ],
                   ),

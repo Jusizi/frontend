@@ -52,6 +52,10 @@ class _BotaoConsultarOuVisualizarClienteComponentState
       return const CircularProgressIndicator.adaptive();
     }
 
+    if (widget.documento.isEmpty) {
+      return Container();
+    }
+
     return TextButton.icon(
       style: TextButton.styleFrom(
         backgroundColor: Colors.black12,
@@ -93,9 +97,7 @@ class _BotaoConsultarOuVisualizarClienteComponentState
           Modular.to.pushNamed(
               '/sistema/clientes/detalhes/${clienteAtualizado.codigo}');
         } catch (e) {
-          SnackBarComponent().showError(
-            "Não foi possível encontrar o cliente.",
-          );
+          debugPrint("Não foi possível encontrar o cliente.");
         }
       },
       label: const Text('Consultar'),

@@ -40,9 +40,11 @@ class _CardPessoaComponentState extends State<CardPessoaComponent> {
               widget.documento.isEmpty ? Container() : Text(widget.documento),
             ],
           ),
-          trailing: BotaoConsultarOuVisualizarClienteComponent(
-            documento: widget.documento,
-          ),
+          trailing: widget.documento.isEmpty
+              ? null
+              : BotaoConsultarOuVisualizarClienteComponent(
+                  documento: widget.documento,
+                ),
         ),
       ],
     );

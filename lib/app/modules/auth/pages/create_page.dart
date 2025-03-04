@@ -81,7 +81,7 @@ class _CreatePageState extends State<CreatePage> {
 
     emailECpfDoCheckout();
 
-    if (isTest && 1 == 2) {
+    if (isTest) {
       _nomeEmpresaController.text = 'Empresa Teste';
       _emailController.text = 'mattmaydana@gmail.com';
       _cpfCNPJController.text = '84167670097';
