@@ -42,6 +42,48 @@ jobs:
       - name: Run Flutter tests
         run: flutter test
 
+      # Realiza o build para web (apenas se os testes passarem)
+      - name: Build Flutter web
+        run: flutter build web --release --no-tree-shake-icons
+        if: success()
+
+      # Configura a chave SSH
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # Adiciona o servidor ao arquivo known_hosts
+      - name: Setup SSH Host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # Cria um backup antes do deploy
+      - name: Backup current version
+        run: |
+          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+            # Verifica se o diretório de backups existe e lista os backups existentes
+            backups_dir="${{ secrets.PATH_BACKUPS }}"
+            backup_files=$(ls -t $backups_dir/web-*.tar.gz)
+            count=$(echo "$backup_files" | wc -l)
+            
+            # Se houver 3 ou mais backups, remove os mais antigos
+            if [ "$count" -ge 3 ]; then
+              backups_to_remove=$(echo "$backup_files" | tail -n +3)  # Pega os backups antigos
+              echo "$backups_to_remove" | xargs rm -f  # Remove os backups antigos
+            fi
+      
+            # Cria o novo backup
+            tar -czf $backups_dir/web-$(date +%Y%m%d%H%M%S).tar.gz -C /home/appjusizi dist
+          EOF
+        if: success()
+
+      # Envia os arquivos para o servidor via SSH
+      - name: Deploy to server via SSH
+        run: |
+          rsync -avz --delete ./build/web/ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
+
       # Limpar cache do Cloudflare (CDN + DNS)
       - name: Clear Cloudflare Cache (CDN + DNS)
         run: |
