@@ -678,7 +678,7 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                   height: 20,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(right: 20, left: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

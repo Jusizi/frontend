@@ -5,6 +5,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
 import '../../../designSystem/components/bar_chart.dart';
+import '../../../designSystem/components/graficos/column_rounded_corner.dart';
+import '../../../designSystem/components/graficos/line_default.dart';
+import '../../../designSystem/components/graficos/pie_gradient.dart';
+import '../../../designSystem/components/graficos/pie_tooltip.dart';
 import '../../../designSystem/components/pie_sample_component.dart';
 import '../../../designSystem/layout/body_component.dart';
 import '../../../designSystem/layout/drawermenuComponent.dart';
@@ -57,60 +61,47 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(
-                    "ATENÇÃO!",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "A versão beta 0.0.3 do sistema está em fase de testes e pode apresentar instabilidades, incluindo possíveis bugs e perda de dados.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    "Atualizações poderão ocorrer a qualquer momento sem aviso prévio.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    "Durante este período, estamos experimentando e tudo pode acontecer até que cheguemos à primeira versão estável, que será nosso pré-lançamento.",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Visibility(
-                    visible:
-                        (kIsWeb || MediaQuery.of(context).size.width > 800),
-                    child: const Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: BarChartSample3(),
-                            ),
-                            Expanded(
-                              child: pieSampleComponent(),
-                            ),
-                          ],
+                  Wrap(
+                    children: [
+                      Card(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 350,
+                          width: 350,
+                          child: ColumnRoundedCorner(),
                         ),
-                        SizedBox(height: 20),
-                        BarChartSample4(),
-                      ],
-                    ),
-                  ),
-                  const Visibility(
-                    visible: !kIsWeb,
-                    child: Column(
-                      children: [
-                        BarChartSample3(),
-                        SizedBox(height: 20),
-                        pieSampleComponent(),
-                        SizedBox(height: 20),
-                        BarChartSample4(),
-                        SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      Card(
+                        child: SizedBox(
+                          height: 360,
+                          width: 500,
+                          child: PieTooltip(),
+                        ),
+                      ),
+                      Card(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 350,
+                          width: 500,
+                          child: PieGradient(),
+                        ),
+                      ),
+                      Card(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 10),
+                          height: 350,
+                          width: 350,
+                          child: pieSampleComponent(),
+                        ),
+                      ),
+                      Card(
+                        child: SizedBox(
+                          height: 350,
+                          width: 600,
+                          child: LineDefault(),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

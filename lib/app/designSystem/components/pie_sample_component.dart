@@ -57,7 +57,7 @@ class PieChart2State extends State {
             children: <Widget>[
               Indicator(
                 color: Color(0xff0293ee),
-                text: 'First',
+                text: 'Créditos',
                 isSquare: true,
               ),
               SizedBox(
@@ -65,23 +65,7 @@ class PieChart2State extends State {
               ),
               Indicator(
                 color: Color(0xfff8b250),
-                text: 'Second',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Color(0xff845bef),
-                text: 'Third',
-                isSquare: true,
-              ),
-              SizedBox(
-                height: 4,
-              ),
-              Indicator(
-                color: Color(0xff13d38e),
-                text: 'Fourth',
+                text: 'Débitos',
                 isSquare: true,
               ),
               SizedBox(
@@ -98,7 +82,7 @@ class PieChart2State extends State {
   }
 
   List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
+    return List.generate(2, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
       final radius = isTouched ? 60.0 : 50.0;
@@ -106,7 +90,7 @@ class PieChart2State extends State {
       switch (i) {
         case 0:
           return PieChartSectionData(
-            color: const Color(0xff0293ee),
+            color: const Color.fromARGB(255, 70, 255, 70),
             value: 40,
             title: '40%',
             radius: radius,
@@ -119,35 +103,9 @@ class PieChart2State extends State {
           );
         case 1:
           return PieChartSectionData(
-            color: const Color(0xfff8b250),
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: const Color(0xff845bef),
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: const Color(0xffffffff),
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: const Color(0xff13d38e),
-            value: 15,
-            title: '15%',
+            color: const Color.fromARGB(255, 255, 89, 89),
+            value: 60,
+            title: '60%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
