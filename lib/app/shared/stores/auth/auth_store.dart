@@ -40,8 +40,6 @@ class AuthStore extends Store<int> {
     if (token != null && token.isNotEmpty) {
       setAcessToken(token);
       isLoggedIn = true;
-      update(Random().nextInt(100));
-
       await getInformacoesCliente();
     }
   }
@@ -74,17 +72,18 @@ class AuthStore extends Store<int> {
     await prefs.remove('jwtToken');
   }
 
-  Future<void> getInformacoesDaEmpresa() async {
+  Future<bool> getInformacoesDaEmpresa() async {
     final response =
         await _minhasinformacoesRepository.getInformacoesDaEmpresa();
 
-    response.fold(
+    return response.fold(
       (l) {
         // EmpresaModel empresaModel = EmpresaModel.getMock();
+        return false;
       },
       (EmpresaModel empresaModel) {
         empresa = empresaModel;
-        update(Random().nextInt(100));
+        return true;
       },
     );
   }
@@ -122,10 +121,10 @@ class AuthStore extends Store<int> {
       (l) {
         return false;
       },
-      (userModel) {
+      (userModel) async {
         atualizarFirebaseToken();
         user = userModel;
-        getInformacoesDaEmpresa();
+        await getInformacoesDaEmpresa();
 
         update(Random().nextInt(100));
         return true;
@@ -159,8 +158,8 @@ class AuthStore extends Store<int> {
 
     resposta.fold((l) {}, (UserModel userModel) {
       user = userModel;
-      getInformacoesCliente();
       getInformacoesDaEmpresa();
+      getInformacoesCliente();
     });
 
     return resposta;

@@ -26,6 +26,8 @@ class _HomePageState extends State<HomePage> {
   late final AuthStore _authStore;
   late final PlanoDeContasStore _planoDeContasStore;
 
+  bool carregarCardsGraficos = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,8 +35,6 @@ class _HomePageState extends State<HomePage> {
     _appStore = Modular.get<AppStore>();
     _authStore = Modular.get<AuthStore>();
     _planoDeContasStore = Modular.get<PlanoDeContasStore>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
@@ -43,6 +43,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSuccess(int state) {
+    if (_authStore.user.name.isNotEmpty) {
+      carregarCardsGraficos = true;
+    }
+
     return Scaffold(
       key: GlobalKey(),
       appBar: AppBar(
@@ -61,42 +65,72 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Wrap(
                     children: [
-                      Card(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          height: 350,
-                          width: 350,
-                          child: ColumnRoundedCorner(),
+                      Visibility(
+                        visible: carregarCardsGraficos,
+                        replacement: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        child: Card(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            height: 350,
+                            width: 350,
+                            child: ColumnRoundedCorner(),
+                          ),
                         ),
                       ),
-                      Card(
-                        child: SizedBox(
-                          height: 360,
-                          width: 500,
-                          child: PieTooltip(),
+                      Visibility(
+                        visible: carregarCardsGraficos,
+                        replacement: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        child: Card(
+                          child: SizedBox(
+                            height: 360,
+                            width: 500,
+                            child: PieTooltip(),
+                          ),
                         ),
                       ),
-                      Card(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          height: 350,
-                          width: 500,
-                          child: PieGradient(),
+                      Visibility(
+                        visible: carregarCardsGraficos,
+                        replacement: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        child: Card(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            height: 350,
+                            width: 500,
+                            child: PieGradient(),
+                          ),
                         ),
                       ),
-                      Card(
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 10),
-                          height: 350,
-                          width: 350,
-                          child: pieSampleComponent(),
+                      Visibility(
+                        visible: carregarCardsGraficos,
+                        replacement: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        child: Card(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            height: 350,
+                            width: 350,
+                            child: pieSampleComponent(),
+                          ),
                         ),
                       ),
-                      Card(
-                        child: SizedBox(
-                          height: 350,
-                          width: 600,
-                          child: LineDefault(),
+                      Visibility(
+                        visible: carregarCardsGraficos,
+                        replacement: const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        ),
+                        child: Card(
+                          child: SizedBox(
+                            height: 350,
+                            width: 600,
+                            child: LineDefault(),
+                          ),
                         ),
                       ),
                     ],
