@@ -56,7 +56,7 @@ class PieChart2State extends State {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Indicator(
-                color: Color(0xff0293ee),
+                color: Color.fromARGB(255, 70, 255, 70),
                 text: 'Créditos',
                 isSquare: true,
               ),
@@ -64,7 +64,7 @@ class PieChart2State extends State {
                 height: 4,
               ),
               Indicator(
-                color: Color(0xfff8b250),
+                color: Color.fromARGB(255, 255, 89, 89),
                 text: 'Débitos',
                 isSquare: true,
               ),
