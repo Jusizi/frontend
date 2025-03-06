@@ -1,10 +1,8 @@
 // ignore_for_file: unused_field
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-import '../../../designSystem/components/bar_chart.dart';
 import '../../../designSystem/components/graficos/column_rounded_corner.dart';
 import '../../../designSystem/components/graficos/line_default.dart';
 import '../../../designSystem/components/graficos/pie_gradient.dart';
