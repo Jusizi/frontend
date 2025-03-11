@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.text = _authStore.user.email;
     _senhaController.text = '';
 
-    if (isTest) {
+    if (isTest && 1 == 2) {
       _emailController.text = 'mattmaydana@gmail.com';
       _senhaController.text = '0hHMaydana%';
       //'0hHMaydana%';
@@ -181,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 10),
                         TextButton(
                           onPressed: () {
-                            Modular.to.navigate('/auth/create');
+                            Modular.to.pushNamed('/auth/create');
                           },
                           child: const Text('Não tem conta? Cadastre-se'),
                         ),
@@ -197,10 +197,10 @@ class _LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (kIsWeb) {
                           launchUrl(Uri.parse(
-                              'https://web.whatsapp.com/send?phone=5554984192072'));
+                              'https://web.whatsapp.com/send?phone=555496487555'));
                         } else {
                           launchUrl(
-                              Uri.parse('whatsapp://send?phone=5554984192072'));
+                              Uri.parse('whatsapp://send?phone=555496487555'));
                         }
                       },
                       label: const Text('Suporte'),

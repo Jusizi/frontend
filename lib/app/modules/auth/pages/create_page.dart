@@ -343,10 +343,10 @@ class _CreatePageState extends State<CreatePage> {
                       onPressed: () {
                         if (kIsWeb) {
                           launchUrl(Uri.parse(
-                              'https://web.whatsapp.com/send?phone=5554984192072'));
+                              'https://web.whatsapp.com/send?phone=555496487555'));
                         } else {
                           launchUrl(
-                              Uri.parse('whatsapp://send?phone=5554984192072'));
+                              Uri.parse('whatsapp://send?phone=555496487555'));
                         }
                       },
                       label: const Text('Suporte'),
