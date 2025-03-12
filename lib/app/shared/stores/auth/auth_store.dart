@@ -153,7 +153,6 @@ class AuthStore extends Store<int> {
   setAcessToken(String token) {
     accessToken = token;
     saveToken(token);
-    print("token é: $token");
   }
 
   Future<Either<String, UserModel>> logar({
