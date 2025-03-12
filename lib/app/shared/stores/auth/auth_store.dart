@@ -37,10 +37,11 @@ class AuthStore extends Store<int> {
 
   Future<void> _initializeStore() async {
     final token = await loadToken();
-    if (token != null && token.isNotEmpty) {
+    if (token != null && token.isNotEmpty && token.length > 30) {
       setAcessToken(token);
-      isLoggedIn = true;
-      await getInformacoesCliente();
+      if (await getInformacoesCliente()) {
+        isLoggedIn = true;
+      }
     }
   }
 
@@ -53,23 +54,27 @@ class AuthStore extends Store<int> {
     final prefs = await SharedPreferences.getInstance();
     final jwtToken = prefs.getString('jwtToken');
 
-    if (jwtToken != null) {
+    if (jwtToken != null && jwtToken.isNotEmpty && jwtToken.length > 30) {
       return jwtToken;
     }
     return null;
   }
 
-  Future<Either<String, EmailECPFCheckoutModel>> emailECpfCheckout(
-      {required String checkoutID}) async {
+  Future<Either<String, EmailECPFCheckoutModel>> emailECpfCheckout({
+    required String checkoutID,
+  }) async {
     final Either<String, EmailECPFCheckoutModel> resposta =
         await _authRepository.emailECpfCheckout(checkoutID);
 
     return resposta;
   }
 
-  Future<void> deleteToken() async {
+  Future<bool> deleteToken() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('jwtToken');
+    prefs.setString('jwtToken', '');
+    prefs.remove('jwtToken');
+    prefs.clear();
+    return true;
   }
 
   Future<bool> getInformacoesDaEmpresa() async {
@@ -132,27 +137,29 @@ class AuthStore extends Store<int> {
     );
   }
 
-  void removeAcessToken() {
+  Future<bool> removeAcessToken() async {
     accessToken = '';
     isLoggedIn = false;
-    deleteToken();
+    await deleteToken();
     update(Random().nextInt(100));
+
+    return true;
   }
 
   setUser(UserModel user) {
     this.user = user;
-    isLoggedIn = true;
-    update(Random().nextInt(100));
   }
 
   setAcessToken(String token) {
     accessToken = token;
     saveToken(token);
-    update(Random().nextInt(100));
+    print("token é: $token");
   }
 
-  Future<Either<String, UserModel>> logar(
-      {required String email, required String password}) async {
+  Future<Either<String, UserModel>> logar({
+    required String email,
+    required String password,
+  }) async {
     final Either<String, UserModel> resposta =
         await _authRepository.login(email, password);
 
@@ -166,7 +173,7 @@ class AuthStore extends Store<int> {
   }
 
   Future<Either<String, String>> sair() async {
-    removeAcessToken();
+    await removeAcessToken();
 
     return Right("Você foi desconectado com sucesso");
   }

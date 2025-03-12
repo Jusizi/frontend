@@ -94,39 +94,44 @@ class _FinanceiroPageState extends State<FinanceiroPage> {
         title: const Text('Financeiro'),
       ),
       drawer: drawerORleading(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 2, // Colocando os cards em duas colunas
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 1.1, // Aumenta a área clicável do card
-          children: [
-            _buildCard(
-              context,
-              title: 'Cobranças',
-              icon: Icons.money,
-              destination: () => Modular.to.pushNamed('/sistema/cobrancas'),
-              color: Colors.white,
+      body: Center(
+        child: SizedBox(
+          width: 800,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GridView.count(
+              crossAxisCount: 2, // Colocando os cards em duas colunas
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.1, // Aumenta a área clicável do card
+              children: [
+                _buildCard(
+                  context,
+                  title: 'Cobranças',
+                  icon: Icons.money,
+                  destination: () => Modular.to.pushNamed('/sistema/cobrancas'),
+                  color: Colors.white,
+                ),
+                _buildCard(
+                  context,
+                  title: 'Conta Bancária',
+                  icon: Icons.account_balance,
+                  destination: () =>
+                      Modular.to.pushNamed('/sistema/contasbancarias'),
+                  color: Colors.white,
+                ),
+                _buildCard(
+                  context,
+                  title: 'Movimentações do Caixa',
+                  icon: Icons.assignment,
+                  destination: () =>
+                      Modular.to.pushNamed('/sistema/caixamovimentacoes'),
+                  color: Colors.white,
+                ),
+                // Pode adicionar mais cards se necessário
+              ],
             ),
-            _buildCard(
-              context,
-              title: 'Conta Bancária',
-              icon: Icons.account_balance,
-              destination: () =>
-                  Modular.to.pushNamed('/sistema/contasbancarias'),
-              color: Colors.white,
-            ),
-            _buildCard(
-              context,
-              title: 'Movimentações do Caixa',
-              icon: Icons.assignment,
-              destination: () =>
-                  Modular.to.pushNamed('/sistema/caixamovimentacoes'),
-              color: Colors.white,
-            ),
-            // Pode adicionar mais cards se necessário
-          ],
+          ),
         ),
       ),
     );

@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.text = _authStore.user.email;
     _senhaController.text = '';
 
-    if (isTest && 1 == 2) {
+    if (isTest) {
       _emailController.text = 'mattmaydana@gmail.com';
       _senhaController.text = '0hHMaydana%';
       //'0hHMaydana%';

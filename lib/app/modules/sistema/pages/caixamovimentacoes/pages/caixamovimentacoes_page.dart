@@ -22,9 +22,13 @@ class _CaixaMovimentacoesPageState extends State<CaixaMovimentacoesPage> {
     super.initState();
 
     contasBancariasStore = Modular.get<ContasBancariasStore>();
-    if (contasBancariasStore.contasbancarias.isEmpty) {
-      contasBancariasStore.getContasBancarias();
-    }
+
+    // executar apos a construcao do widget
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (contasBancariasStore.contasbancarias.isEmpty) {
+        contasBancariasStore.getContasBancarias();
+      }
+    });
   }
 
   Widget _buildError(Exception state) {
@@ -42,10 +46,7 @@ class _CaixaMovimentacoesPageState extends State<CaixaMovimentacoesPage> {
       return const Center(
           child: Text('Nenhuma conta bancaria foi encontrada.'));
     }
-    if (contasBancariasStore.contasbancarias.length == 1) {
-      Modular.to.pushReplacementNamed('/sistema/caixamovimentacoes/conta',
-          arguments: contasBancariasStore.contasbancarias[0]);
-    }
+
     return ListView.builder(
       itemCount: contasBancariasStore.contasbancarias.length,
       itemBuilder: (context, indexContexto) {

@@ -1,8 +1,8 @@
+import 'package:appjusizi/app/modules/auth/guards/authless_guard.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'app_splash_page.dart';
 import 'modules/auth/auth_module.dart';
-import 'modules/auth/guards/auth_guard.dart';
 import 'modules/planos/planos_module.dart';
 import 'modules/sistema/sistema_module.dart';
 import 'repositories/auth/auth_repository_implementation.dart';
@@ -26,13 +26,19 @@ class AppModule extends Module {
   void routes(r) {
     r.child('/', child: (context) => const AppSplashPage());
     r.module('/auth/', module: AuthModule(), guards: [
-      AuthGuard(),
+      // AuthGuard(),
     ]);
-    r.module('/planos/', module: PlanosModule());
+    r.module(
+      '/planos/',
+      module: PlanosModule(),
+    );
     r.module(
       '/sistema/',
       module: SistemaModule(),
       transition: TransitionType.fadeIn,
+      guards: [
+        // AuthLessGuard(),
+      ],
     );
     //  r.module('/configuracoes', module: ConfiguracoesModule());
     //r.module('/contasbancarias', module: ContasBancariasModule());

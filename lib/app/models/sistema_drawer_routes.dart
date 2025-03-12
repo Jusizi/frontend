@@ -77,7 +77,7 @@ class SistemaDrawerRoutes {
   List<RouteData> get props => [
         inicio,
         agenda,
-        contratos,
+        //  contratos,
         contasBancarias,
         processos,
         clientes,

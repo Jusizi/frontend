@@ -20,14 +20,14 @@ class _SairPageState extends State<SairPage> {
     authStore = Modular.get<AuthStore>();
 
     authStore.sair().then(
-          (Either<String, String> resposta) => {
-            resposta.fold((l) {
-              Modular.to.pushNamedAndRemoveUntil('/auth/', (p0) => true);
-            }, (String mensagem) {
-              Modular.to.pushNamedAndRemoveUntil('/auth/', (p0) => true);
-            })
-          },
-        );
+      (Either<String, String> resposta) {
+        resposta.fold((l) {
+          Modular.to.pushNamedAndRemoveUntil('/auth/', (p0) => true);
+        }, (String mensagem) {
+          Modular.to.pushNamedAndRemoveUntil('/auth/', (p0) => true);
+        });
+      },
+    );
   }
 
   @override
