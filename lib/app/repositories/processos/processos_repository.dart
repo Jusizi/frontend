@@ -10,10 +10,9 @@ abstract class ProcessosRepository {
   Future<Either<String, String>> solicitarAtualizacaoDoProcesso(
     ProcessoModel processo,
   );
-
   Future<Either<String, ProcessoModel>> getProcessoDetalhes(
     String processoCodigo,
   );
-
   Future<Either<String, String>> monitorarProcesso(String processoCodigo);
+  Future<Either<String, String>> adicionarProcesso(String processoCodigo);
 }

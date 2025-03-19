@@ -123,6 +123,9 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                 },
                 (r) {
                   SnackBarComponent().showSuccess(r);
+
+                  Modular.to.popAndPushNamed(
+                      '/sistema/clientes/detalhes/${widget.clienteCodigo}');
                 },
               );
             },

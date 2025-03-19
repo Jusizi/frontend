@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_triple/flutter_triple.dart';
 
+import '../../../../models/contrato/criando_contrato_model.dart';
 import '../../../../models/contrato_listagem_model.dart';
 import '../../../../models/contrato_model.dart';
 import '../../../../repositories/contratos/contratos_repository.dart';
@@ -13,6 +14,17 @@ class ContratosStore extends Store<int> {
   List<ContratoListagemModel> contratosCopy = [];
 
   ContratosStore(this._repository) : super(0);
+
+  Future<void> criarContrato(CriandoContratoModel contrato) async {
+    setLoading(true);
+    try {
+      await _repository.criarContrato(contrato);
+      setLoading(false);
+    } on Exception catch (e) {
+      setError(e);
+      setLoading(false);
+    }
+  }
 
   Future<Either<String, ContratoModel>> getContratoDetalhes(
     String contratoCodigo,

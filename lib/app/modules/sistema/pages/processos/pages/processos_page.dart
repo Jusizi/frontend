@@ -109,6 +109,17 @@ class _ProcessosPageState extends State<ProcessosPage> {
         onLoading: (context) => _buildLoading(),
         onState: (context, state) => _buildSuccess(processosStore.processos),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Modular.to.pushNamed('/sistema/processo/adicionar');
+        },
+        label: Row(
+          children: [
+            Icon(Icons.add),
+            Text("Adicionar processo (CNJ)"),
+          ],
+        ),
+      ),
     );
   }
 }

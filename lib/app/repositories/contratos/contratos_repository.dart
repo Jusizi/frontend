@@ -1,3 +1,5 @@
+import 'package:appjusizi/app/models/contrato/criando_contrato_model.dart';
+
 import '../../models/contrato_listagem_model.dart';
 import '../../models/contrato_model.dart';
 import '../../shared/either.dart';
@@ -8,4 +10,6 @@ abstract class ContratosRepository {
   Future<Either<String, ContratoModel>> getContratoDetalhes(
     String contratoCodigo,
   );
+
+  Future<Either<String, String>> criarContrato(CriandoContratoModel contrato);
 }

@@ -1,3 +1,4 @@
+import '../../models/contrato/criando_contrato_model.dart';
 import '../../models/contrato_listagem_model.dart';
 import '../../models/contrato_model.dart';
 import '../../shared/either.dart';
@@ -11,6 +12,25 @@ class ContratosRepositoryImplementation implements ContratosRepository {
 
   ContratosRepositoryImplementation() {
     _httpClientService = DIOHttpClientServiceImplementation();
+  }
+
+  @override
+  Future<Either<String, String>> criarContrato(
+      CriandoContratoModel contrato) async {
+    try {
+      final Either<String, HttpClientResponse> response =
+          await _httpClientService.post(
+        endpoint: '/contrato',
+        body: contrato.toMap(),
+      );
+
+      return response.fold(
+        (l) => Left(l),
+        (r) => Right(r.data['message']),
+      );
+    } on Exception catch (e) {
+      return Left(e.toString());
+    }
   }
 
 /*

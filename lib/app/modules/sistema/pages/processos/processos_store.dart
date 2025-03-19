@@ -14,6 +14,29 @@ class ProcessosStore extends Store<int> {
 
   ProcessosStore(this._repository) : super(0);
 
+  Future<Either<String, String>> adicionarProcesso(String numeroCNJ) async {
+    setLoading(true);
+    try {
+      final result = await _repository.adicionarProcesso(numeroCNJ);
+      return result.fold(
+        (l) {
+          setError(Exception(l));
+          return Left(l);
+        },
+        (r) {
+          setLoading(false);
+          update((Random()).nextInt(99999));
+          return Right(r);
+        },
+      );
+    } on Exception catch (e) {
+      setError(e);
+      return Left(e.toString());
+    } finally {
+      setLoading(false);
+    }
+  }
+
   Future<void> filtrarProcessos(String filtro) async {
     setLoading(true);
     try {

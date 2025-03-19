@@ -65,6 +65,7 @@ import 'pages/modelos/pages/modelo_novo_detalhes.dart';
 import 'pages/modelos/pages/modelo_novo_page.dart';
 import 'pages/modelos/pages/modelos_page.dart';
 import 'pages/planodecontas/planodecontas_store.dart';
+import 'pages/processos/pages/processo_adicionar_page.dart';
 import 'pages/processos/pages/processo_detalhes_page.dart';
 import 'pages/processos/pages/processo_movimentacoes_page.dart';
 import 'pages/processos/pages/processos_page.dart';
@@ -174,6 +175,9 @@ class SistemaModule extends Module {
 
     // PROCESSOS
     r.child('/processos', child: (context) => const ProcessosPage());
+    r.child('/processo/adicionar',
+        child: (context) => const ProcessoAdicionarPage());
+
     r.child(
       '/processos/detalhe/:processoCodigo',
       child: (context) =>

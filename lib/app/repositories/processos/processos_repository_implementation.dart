@@ -13,6 +13,20 @@ class ProcessosRepositoryImplementation implements ProcessosRepository {
   }
 
   @override
+  Future<Either<String, String>> adicionarProcesso(
+      String processoCodigo) async {
+    final resposta = await _httpClientService.post(
+      endpoint: '/processos/adicionarporcnj',
+      body: {"cnj": processoCodigo},
+    );
+
+    return resposta.fold(
+      (l) => Left(l),
+      (r) => Right(r.data['message']),
+    );
+  }
+
+  @override
   Future<Either<String, String>> monitorarProcesso(
       String processoCodigo) async {
     final resposta = await _httpClientService.post(
