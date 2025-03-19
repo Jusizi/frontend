@@ -21,6 +21,7 @@ class _ProcessoAdicionarPageState extends State<ProcessoAdicionarPage> {
 
   String _errorMessage = '';
   bool _isValidCNJ = false;
+  final bool _isAddingProcesso = false;
 
   @override
   void initState() {
@@ -105,7 +106,13 @@ class _ProcessoAdicionarPageState extends State<ProcessoAdicionarPage> {
                 ),
                 Visibility(visible: _isValidCNJ, child: SizedBox(height: 20)),
                 Visibility(
-                  visible: _isValidCNJ,
+                  visible: _isAddingProcesso,
+                  child: Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                ),
+                Visibility(
+                  visible: _isValidCNJ && !_isAddingProcesso,
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_isValidCNJ) {
