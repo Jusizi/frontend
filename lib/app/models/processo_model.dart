@@ -12,6 +12,8 @@ class ProcessoModel {
   String quantidadeMovimentacoes;
   String demandante;
   String demandado;
+  String resumo;
+  DateTime resumoDataAtualizacao;
   String ultimaMovimentacaoDescricao;
   String ultimaMovimentacaoData;
   List<MovimentacaoModel> movimentacoes = [];
@@ -23,6 +25,8 @@ class ProcessoModel {
     required this.quantidadeMovimentacoes,
     required this.demandante,
     required this.demandado,
+    required this.resumo,
+    required this.resumoDataAtualizacao,
     required this.ultimaMovimentacaoDescricao,
     required this.ultimaMovimentacaoData,
     required this.movimentacoes,
@@ -42,6 +46,8 @@ class ProcessoModel {
     String? quantidadeMovimentacoes,
     String? demandante,
     String? demandado,
+    String? resumo,
+    DateTime? resumoDataAtualizacao,
     String? ultimaMovimentacaoDescricao,
     String? ultimaMovimentacaoData,
     List<MovimentacaoModel>? movimentacoes,
@@ -56,6 +62,9 @@ class ProcessoModel {
           quantidadeMovimentacoes ?? this.quantidadeMovimentacoes,
       demandante: demandante ?? this.demandante,
       demandado: demandado ?? this.demandado,
+      resumo: resumo ?? this.resumo,
+      resumoDataAtualizacao:
+          resumoDataAtualizacao ?? this.resumoDataAtualizacao,
       ultimaMovimentacaoDescricao:
           ultimaMovimentacaoDescricao ?? this.ultimaMovimentacaoDescricao,
       ultimaMovimentacaoData:
@@ -73,6 +82,8 @@ class ProcessoModel {
       'quantidadeMovimentacoes': quantidadeMovimentacoes,
       'demandante': demandante,
       'demandado': demandado,
+      'resumo': resumo,
+      'resumoDataAtualizacao': resumoDataAtualizacao,
       'ultimaMovimentacaoDescricao': ultimaMovimentacaoDescricao,
       'ultimaMovimentacaoData': ultimaMovimentacaoData,
       'movimentacoes': movimentacoes.map((x) => x.toMap()).toList(),
@@ -89,6 +100,10 @@ class ProcessoModel {
           (map['quantidadeMovimentacoes'] ?? '').toString(),
       demandante: (map['demandante'] ?? '').toString(),
       demandado: (map['demandado'] ?? '').toString(),
+      resumo: (map['resumo'] ?? '').toString(),
+      resumoDataAtualizacao:
+          DateTime.tryParse(map['resumoDataAtualizacao'] ?? '') ??
+              DateTime.now(),
       ultimaMovimentacaoDescricao:
           (map['ultimaMovimentacaoDescricao'] ?? '').toString(),
       ultimaMovimentacaoData: (map['ultimaMovimentacaoData'] ?? '').toString(),
@@ -115,6 +130,8 @@ class ProcessoModel {
         other.quantidadeMovimentacoes == quantidadeMovimentacoes &&
         other.demandante == demandante &&
         other.demandado == demandado &&
+        other.resumo == resumo &&
+        other.resumoDataAtualizacao == resumoDataAtualizacao &&
         other.ultimaMovimentacaoDescricao == ultimaMovimentacaoDescricao &&
         other.ultimaMovimentacaoData == ultimaMovimentacaoData &&
         listEquals(other.movimentacoes, movimentacoes) &&
@@ -129,6 +146,8 @@ class ProcessoModel {
         quantidadeMovimentacoes.hashCode ^
         demandante.hashCode ^
         demandado.hashCode ^
+        resumo.hashCode ^
+        resumoDataAtualizacao.hashCode ^
         ultimaMovimentacaoDescricao.hashCode ^
         ultimaMovimentacaoData.hashCode ^
         movimentacoes.hashCode ^

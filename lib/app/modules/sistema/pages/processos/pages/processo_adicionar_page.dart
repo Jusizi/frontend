@@ -2,6 +2,7 @@ import 'package:appjusizi/app/designSystem/layout/drawermenuComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../../../main.dart';
 import '../../../../../designSystem/snackbar_component.dart';
 import '../../../../../models/CNJ.dart';
 import '../processos_store.dart';
@@ -21,13 +22,18 @@ class _ProcessoAdicionarPageState extends State<ProcessoAdicionarPage> {
 
   String _errorMessage = '';
   bool _isValidCNJ = false;
-  final bool _isAddingProcesso = false;
+  bool _isAddingProcesso = false;
 
   @override
   void initState() {
     super.initState();
 
     processosStore = Modular.get<ProcessosStore>();
+
+    if (isTest) {
+      _numeroProcessoController.text = '5002200-64.2021.8.21.0076';
+      _isValidCNJ = true;
+    }
   }
 
   @override
@@ -68,40 +74,47 @@ class _ProcessoAdicionarPageState extends State<ProcessoAdicionarPage> {
                   ),
                   keyboardType: TextInputType.number,
                   onChanged: (String value) {
-                    setState(() {
-                      // Remove tudo que não for número, mas mantendo a estrutura do valor colado
-                      String cleanedValue =
-                          value.replaceAll(RegExp(r'[^0-9]'), '');
+                    // Remove tudo que não for número, mas mantendo a estrutura do valor colado
+                    String cleanedValue =
+                        value.replaceAll(RegExp(r'[^0-9]'), '');
 
-                      // Se o valor limpo tiver mais de 20 caracteres, não permitir
-                      if (cleanedValue.length > 20) {
+                    // Se o valor limpo tiver mais de 20 caracteres, não permitir
+                    if (cleanedValue.length > 20) {
+                      setState(() {
                         _errorMessage =
                             'O número do processo deve ter 20 caracteres.';
                         _isValidCNJ = false;
-                      } else {
+                      });
+                    } else {
+                      setState(() {
                         _errorMessage = '';
                         _isValidCNJ =
                             false; // Assume como inválido enquanto está digitando
-                      }
+                      });
+                    }
 
-                      try {
-                        // Tenta criar o objeto CNJ com o valor limpo
-                        CNJ cnj = CNJ(cleanedValue);
+                    try {
+                      // Tenta criar o objeto CNJ com o valor limpo
+                      CNJ cnj = CNJ(cleanedValue);
+
+                      setState(() {
                         _errorMessage = '';
                         _isValidCNJ = true; // Marca como válido
+                      });
 
-                        // Formata o valor do CNJ para mostrar no campo
-                        _numeroProcessoController.text = cnj.value;
-                        _numeroProcessoController.selection =
-                            TextSelection.fromPosition(
-                          TextPosition(
-                              offset: _numeroProcessoController.text.length),
-                        ); // Mantém o cursor no final após formatação
-                      } catch (e) {
+                      // Formata o valor do CNJ para mostrar no campo
+                      _numeroProcessoController.text = cnj.value;
+                      _numeroProcessoController.selection =
+                          TextSelection.fromPosition(
+                        TextPosition(
+                            offset: _numeroProcessoController.text.length),
+                      ); // Mantém o cursor no final após formatação
+                    } catch (e) {
+                      setState(() {
                         _errorMessage = e.toString();
                         _isValidCNJ = false;
-                      }
-                    });
+                      });
+                    }
                   },
                 ),
                 Visibility(visible: _isValidCNJ, child: SizedBox(height: 20)),
@@ -116,11 +129,17 @@ class _ProcessoAdicionarPageState extends State<ProcessoAdicionarPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_isValidCNJ) {
+                        setState(() {
+                          _isAddingProcesso = true;
+                        });
                         final resposta = await processosStore
                             .adicionarProcesso(_numeroProcessoController.text);
 
                         resposta.fold((String mensagemErro) {
                           SnackBarComponent().showError(mensagemErro);
+                          setState(() {
+                            _isAddingProcesso = false;
+                          });
                         }, (String mensagemSucesso) {
                           SnackBarComponent().showSuccess(mensagemSucesso);
                           Modular.to.pushNamed('/sistema/processos');

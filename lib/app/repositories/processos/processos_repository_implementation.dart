@@ -99,12 +99,38 @@ class ProcessosRepositoryImplementation implements ProcessosRepository {
   ) async {
     final resposta = await _httpClientService.post(
       endpoint: '/processos/consultarMovimentacoes',
-      body: {"cnj": processo.numeroCNJ},
+      body: {
+        "cnj": processo.numeroCNJ,
+      },
     );
 
     return resposta.fold(
       (l) => Left(l),
       (r) => Right('Movimentações do processo consultadas com sucesso'),
+    );
+  }
+
+  @override
+  Future<Either<String, String>> getLinkDownloadResumoPDF(
+      ProcessoModel processo) async {
+    final resposta = await _httpClientService
+        .get('/processos/linkresumopdf/?cnj=${processo.numeroCNJ}');
+
+    return resposta.fold(
+      (l) => Left(l),
+      (r) => Right(r.data['link']),
+    );
+  }
+
+  @override
+  Future<Either<String, String>> solicitarResumoProcessoParaIA(
+      String processoCodigo) async {
+    final resposta =
+        await _httpClientService.get('/processos/resumo/$processoCodigo');
+
+    return resposta.fold(
+      (l) => Left(l),
+      (r) => Right('Resumo do processo solicitado com sucesso'),
     );
   }
 }

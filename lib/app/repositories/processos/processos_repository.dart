@@ -4,11 +4,18 @@ import '../../shared/either.dart';
 
 abstract class ProcessosRepository {
   Future<Either<String, List<ProcessoListagemModel>>> getProcessos();
+
+  Future<Either<String, String>> getLinkDownloadResumoPDF(
+    ProcessoModel processo,
+  );
   Future<Either<String, String>> consultarMovimentacoesProcesso(
     ProcessoModel processo,
   );
   Future<Either<String, String>> solicitarAtualizacaoDoProcesso(
     ProcessoModel processo,
+  );
+  Future<Either<String, String>> solicitarResumoProcessoParaIA(
+    String processoCodigo,
   );
   Future<Either<String, ProcessoModel>> getProcessoDetalhes(
     String processoCodigo,

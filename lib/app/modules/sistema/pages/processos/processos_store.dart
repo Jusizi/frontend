@@ -14,6 +14,23 @@ class ProcessosStore extends Store<int> {
 
   ProcessosStore(this._repository) : super(0);
 
+  Future<Either<String, String>> getLinkDownloadResumoPDF(
+      ProcessoModel processo) async {
+    try {
+      final result = await _repository.getLinkDownloadResumoPDF(processo);
+      return result.fold(
+        (l) {
+          return Left(l);
+        },
+        (r) {
+          return Right(r);
+        },
+      );
+    } on Exception catch (e) {
+      return Left(e.toString());
+    }
+  }
+
   Future<Either<String, String>> adicionarProcesso(String numeroCNJ) async {
     setLoading(true);
     try {
@@ -54,6 +71,24 @@ class ProcessosStore extends Store<int> {
       setError(e);
     } finally {
       setLoading(false);
+    }
+  }
+
+  Future<Either<String, String>> solicitarResumoProcessoParaIA(
+      String processoCodigo) async {
+    try {
+      final result =
+          await _repository.solicitarResumoProcessoParaIA(processoCodigo);
+      return result.fold(
+        (l) {
+          return Left(l);
+        },
+        (r) {
+          return Right(r);
+        },
+      );
+    } on Exception catch (e) {
+      return Left(e.toString());
     }
   }
 

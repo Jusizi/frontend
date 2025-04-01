@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../../designSystem/components/card_processo_envolvido_component.dart';
 import '../../../../../designSystem/components/card_processo_movimentacao_component.dart';
@@ -28,6 +29,8 @@ class _ProcessoDetalhesPageState extends State<ProcessoDetalhesPage> {
   bool loadingSolicitarAtualizacaoDoProcesso = false;
   bool loadingMonitorarProcesso = false;
   late ProcessoModel processo;
+  bool loadingSolicitarResumoIA = false;
+  bool loadingDownloadResumoPDF = false;
 
   @override
   void initState() {
@@ -66,6 +69,115 @@ class _ProcessoDetalhesPageState extends State<ProcessoDetalhesPage> {
                 Visibility(
                   visible: processo.demandado.isNotEmpty,
                   child: Text("Demandado: ${processo.demandado}"),
+                ),
+                Visibility(
+                  visible: processo.resumo.isNotEmpty,
+                  replacement: Center(
+                    child: Visibility(
+                      visible: !loadingSolicitarResumoIA,
+                      replacement: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                      child: TextButton.icon(
+                        onPressed: () async {
+                          setState(() {
+                            loadingSolicitarResumoIA = true;
+                          });
+
+                          SnackBarComponent().showWarning(
+                            "Aguarde, estamos solicitando o resumo do processo para IA (Inteligência Artificial).",
+                          );
+
+                          final resposta = await processoStore
+                              .solicitarResumoProcessoParaIA(processo.codigo);
+
+                          resposta.fold(
+                            (String erro) {
+                              SnackBarComponent().showError(erro);
+                            },
+                            (String sucesso) {
+                              Modular.to.pushReplacementNamed(
+                                  '/sistema/processos/detalhe/${processo.codigo}');
+                            },
+                          );
+                        },
+                        label: Text(
+                            'Solicitar Resumo do processo para IA (Inteligência Artificial)'),
+                        icon: Icon(Icons.smart_toy_outlined),
+                      ),
+                    ),
+                  ),
+                  child: SelectionArea(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.4,
+                          child: Divider(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Wrap(
+                          spacing: 30,
+                          alignment: WrapAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                'Última atualização: ${processo.resumoDataAtualizacao.day}/${processo.resumoDataAtualizacao.month}/${processo.resumoDataAtualizacao.year} às ${processo.resumoDataAtualizacao.hour}:${processo.resumoDataAtualizacao.minute}'),
+                            const Icon(Icons.lightbulb_outline),
+                            Text(
+                                "Resumo do processo por IA (Inteligência Artificial)"),
+                            Visibility(
+                              visible: !loadingDownloadResumoPDF,
+                              replacement:
+                                  const CircularProgressIndicator.adaptive(),
+                              child: TextButton.icon(
+                                onPressed: () async {
+                                  setState(() {
+                                    loadingDownloadResumoPDF = true;
+                                  });
+
+                                  final resposta = await processoStore
+                                      .getLinkDownloadResumoPDF(processo);
+
+                                  resposta.fold((String mensagemErro) {
+                                    SnackBarComponent().showError(mensagemErro);
+                                  }, (String linkDownload) async {
+                                    SnackBarComponent().showSuccess(
+                                      "Download do resumo em PDF iniciado com sucesso",
+                                    );
+
+                                    if (await canLaunchUrl(
+                                        Uri.parse(linkDownload))) {
+                                      await launchUrl(
+                                        Uri.parse(linkDownload),
+                                        mode: LaunchMode.externalApplication,
+                                      );
+                                    }
+                                  });
+                                },
+                                label: Text("Download do resumo em PDF"),
+                                icon: Icon(Icons.picture_as_pdf_outlined),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(processo.resumo),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.4,
+                          child: Divider(),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 Visibility(
                   visible: processo.movimentacoes.isEmpty,
@@ -266,16 +378,6 @@ class _ProcessoDetalhesPageState extends State<ProcessoDetalhesPage> {
                       Icons.monitor,
                     ),
                   ),
-                ),
-                TextButton.icon(
-                  onPressed: () {
-                    SnackBarComponent().showWarning(
-                      "Esta funcionalidade está sendo implementada, em breve você terá novas informações.",
-                    );
-                  },
-                  label: const Text(
-                      "Solicitar resumo do processo a Inteligência Artificial"),
-                  icon: const Icon(Icons.sentiment_very_satisfied_outlined),
                 ),
               ],
             ),
