@@ -72,7 +72,7 @@ class _AppWidgetState extends State<AppWidget> {
             Modular.to.pushNamed(message.data['modularLink']);
           }
         } else {
-          Modular.to.navigate('/notificacoes/');
+          Modular.to.navigate('/');
         }
       });
 
