@@ -124,9 +124,9 @@ class ProcessosRepositoryImplementation implements ProcessosRepository {
 
   @override
   Future<Either<String, String>> solicitarResumoProcessoParaIA(
-      String processoCodigo) async {
+      String processoCodigoCNJ) async {
     final resposta =
-        await _httpClientService.get('/processos/resumo/$processoCodigo');
+        await _httpClientService.get('/processos/resumo/$processoCodigoCNJ');
 
     return resposta.fold(
       (l) => Left(l),

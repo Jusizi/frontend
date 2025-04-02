@@ -88,8 +88,9 @@ class _ProcessoDetalhesPageState extends State<ProcessoDetalhesPage> {
                             "Aguarde, estamos solicitando o resumo do processo para IA (Inteligência Artificial).",
                           );
 
-                          final resposta = await processoStore
-                              .solicitarResumoProcessoParaIA(processo.codigo);
+                          final resposta =
+                              await processoStore.solicitarResumoProcessoParaIA(
+                                  processo.numeroCNJ);
 
                           resposta.fold(
                             (String erro) {

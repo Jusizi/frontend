@@ -15,7 +15,7 @@ abstract class ProcessosRepository {
     ProcessoModel processo,
   );
   Future<Either<String, String>> solicitarResumoProcessoParaIA(
-    String processoCodigo,
+    String processoCodigoCNJ,
   );
   Future<Either<String, ProcessoModel>> getProcessoDetalhes(
     String processoCodigo,
