@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../models/email_e_cpf_checkout_model.dart';
@@ -50,7 +51,13 @@ class AuthRepositoryImplementation implements IAuthRepositoryInterface {
       foto: '-',
     ));
 
-    String? token = await FirebaseMessaging.instance.getToken();
+    String? token = '';
+    try {
+      token = await FirebaseMessaging.instance.getToken();
+    } catch (e) {
+      debugPrint('Error getting FCM token: $e');
+    }
+
     String tokenFcm = token ?? '';
 
     final response = await _httpClientService.post(
