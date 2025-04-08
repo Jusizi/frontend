@@ -63,6 +63,9 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  Text(
+                      "O aplicativo está em desenvolvimento e não está pronto para uso. Os gráficos e cards estão apenas para fins de teste."),
+                  const SizedBox(height: 20),
                   Wrap(
                     children: [
                       Visibility(

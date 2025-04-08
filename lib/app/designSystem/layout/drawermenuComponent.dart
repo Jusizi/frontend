@@ -47,13 +47,13 @@ class _DrawerMenuComponentState extends State<DrawerMenuComponent> {
       children: [
         Expanded(
           child: UserAccountsDrawerHeader(
-            decoration: const BoxDecoration(
+            /* decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/icons/2-preto.png"),
                 fit: BoxFit.cover,
                 alignment: Alignment.centerRight,
               ),
-            ),
+            ), */
             accountName: Text(
               authStore.user.name,
               style: const TextStyle(
