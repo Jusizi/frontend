@@ -31,17 +31,29 @@ class _EmpresaPageState extends State<EmpresaPage> {
       body: Bodycomponent(
         bodyWidget: Padding(
           padding: const EdgeInsets.all(10),
-          child: Card(
-            child: ListTile(
-              title: const Text("Empresa"),
-              subtitle: Row(children: [
-                Text("${_authStore.empresa.apelido} "),
-                const Icon(Icons.verified_outlined),
-                const Spacer(),
-                Text(_authStore.empresa.documentoNumero),
-              ]),
-              leading: const Icon(Icons.business),
-            ),
+          child: Column(
+            children: [
+              Card(
+                child: ListTile(
+                  title: const Text("Empresa"),
+                  subtitle: Row(children: [
+                    Text("${_authStore.empresa.apelido} "),
+                    const Icon(Icons.verified_outlined),
+                    const Spacer(),
+                    Text(_authStore.empresa.documentoNumero),
+                  ]),
+                  leading: const Icon(Icons.business),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextButton.icon(
+                onPressed: () {
+                  Modular.to.pushNamed('/sistema/empresa/colaboradores');
+                },
+                label: Text("Usuários do sistema"),
+                icon: const Icon(Icons.people),
+              )
+            ],
           ),
         ),
       ),

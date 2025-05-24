@@ -34,9 +34,9 @@ class ColaboradorModel {
 
   factory ColaboradorModel.fromMap(Map<String, dynamic> map) {
     return ColaboradorModel(
-      id: map['id'] ?? '',
-      nome: map['nome'] ?? '',
-      email: map['email'] ?? '',
+      id: (map['codigo'] ?? '').toString(),
+      nome: (map['nome'] ?? '').toString(),
+      email: (map['email'] ?? '').toString(),
     );
   }
 

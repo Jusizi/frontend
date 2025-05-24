@@ -14,16 +14,16 @@ class EmpresaRepositoryImplementation implements EmpresaRepository {
   @override
   Future<Either<String, List<ColaboradorModel>>> getColaboradores() async {
     final resposta = await _httpClientService.get(
-      '/business/colaboradores',
+      '/empresa/usuarios',
     );
 
     return resposta.fold(
       (l) => Left(l),
       (r) {
         return Right(
-          r.data
-              .map<ColaboradorModel>((e) => ColaboradorModel.fromJson(e))
-              .toList(),
+          r.data.map<ColaboradorModel>((e) {
+            return ColaboradorModel.fromMap(e);
+          }).toList(),
         );
       },
     );
@@ -33,7 +33,7 @@ class EmpresaRepositoryImplementation implements EmpresaRepository {
   Future<Either<String, ColaboradorModel>> addColaborador(
       ColaboradorModel colaboradorModel) async {
     final resposta = await _httpClientService.post(
-      endpoint: '/business/colaboradores',
+      endpoint: '/empresa/usuarios',
       body: {
         "nome": colaboradorModel.nome,
         "email": colaboradorModel.email,

@@ -1,3 +1,8 @@
+import 'package:appjusizi/app/modules/sistema/pages/empresa/colaboradores/colaboradores_novo_page.dart';
+import 'package:appjusizi/app/modules/sistema/pages/empresa/colaboradores/colaboradores_page.dart';
+import 'package:appjusizi/app/modules/sistema/pages/empresa/empresa_store.dart';
+import 'package:appjusizi/app/repositories/empresa/empresa_repository.dart';
+import 'package:appjusizi/app/repositories/empresa/empresa_repository_implementation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_module.dart';
@@ -117,6 +122,9 @@ class SistemaModule extends Module {
     i.addSingleton<ContasBancariasRepository>(
         ContasBancariasRepositoryImplementation.new);
     i.addSingleton<ContasBancariasStore>(ContasBancariasStore.new);
+
+    i.addSingleton<EmpresaRepository>(EmpresaRepositoryImplementation.new);
+    i.addSingleton<EmpresaStore>(EmpresaStore.new);
   }
 
   @override
@@ -188,6 +196,16 @@ class SistemaModule extends Module {
 
     // EMPRESA
     r.child('/empresa', child: (context) => const EmpresaPage());
+
+    // COLABORADORES
+    r.child(
+      '/empresa/colaboradores',
+      child: (context) => const ColaboradoresPage(),
+    );
+    r.child(
+      '/empresa/colaboradores/cadastro',
+      child: (context) => const ColaboradoresNovoPage(),
+    );
 
     // CONFIGURAÇÕES
     r.child('/configuracoes', child: (context) => const ConfiguracoesPage());

@@ -98,3 +98,8 @@
     ]
   }
 ```
+
+Para buildar o Android
+```bash
+flutter build apk --release --dart-define=baseUrlAPI=https://api.jusizi.com.br --dart-define=baseUrlAUTH=https://auth.jusizi.com.br/ --dart-define=FIREBASE_API_KEY=AIzaSyDLTJfxmzLy4dGk0cMmSGOCdl33CQMyrKU --dart-define=FIREBASE_APP_ID=1:913916913322:android:e989dfc364bca58dea12d3 --dart-define=FIREBASE_MESSAGING_SENDER_ID=913916913322 --dart-define=FIREBASE_PROJECT_ID=jusizi-2999c --dart-define=FIREBASE_STORAGE_BUCKET=jusizi-2999c.appspot.com
+```

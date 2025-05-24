@@ -1,8 +1,8 @@
+import 'package:appjusizi/app/designSystem/layout/drawermenuComponent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-import '../../../../../designSystem/layout/layout_component.dart';
 import '../../../../../models/colaborador_model.dart';
 import '../empresa_store.dart';
 
@@ -21,6 +21,10 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
     super.initState();
 
     empresaStore = Modular.get<EmpresaStore>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      empresaStore.getColaboradores();
+    });
   }
 
   Widget _buildError(Exception state) {
@@ -86,6 +90,7 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                   },
                   icon: const Icon(Icons.delete),
                 ),*/
+
                 onTap: () => Modular.to.pushNamed(
                   '/empresa/colaboradores/detalhes',
                   arguments: data,
@@ -100,21 +105,17 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutComponent(
-      title: 'Colaboradores',
-      esconderDrawer: true,
-      actions: [
-        IconButton(
-          onPressed: () {
-            Modular.to.pushNamed('/empresa/colaboradores/novo');
-          },
-          icon: const Icon(Icons.add),
-        ),
-        IconButton(
-          onPressed: empresaStore.getColaboradores,
-          icon: const Icon(Icons.sync),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Usuários do sistema'),
+      ),
+      drawer: drawerORleading(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Modular.to.pushNamed('/sistema/empresa/colaboradores/cadastro');
+        },
+        child: const Icon(Icons.person_add_alt_1_rounded),
+      ),
       body: RefreshIndicator(
         onRefresh: empresaStore.getColaboradores,
         child: ScopedBuilder<EmpresaStore, int>(

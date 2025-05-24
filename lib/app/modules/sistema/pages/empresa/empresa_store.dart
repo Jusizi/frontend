@@ -9,9 +9,7 @@ class EmpresaStore extends Store<int> {
   final EmpresaRepository _repository;
   List<ColaboradorModel> colaboradores = [];
 
-  EmpresaStore(this._repository) : super(0) {
-    getColaboradores();
-  }
+  EmpresaStore(this._repository) : super(0);
 
   Future<void> getColaboradores() async {
     setLoading(true);
