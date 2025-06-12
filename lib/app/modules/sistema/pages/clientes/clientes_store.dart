@@ -168,7 +168,7 @@ class ClientesStore extends Store<List<ClienteListagemModel>> {
 
     return result.fold((l) {
       throw GenericException(l);
-    }, (r) => 'Cliente adicionado com sucesso');
+    }, (r) => 'Cliente atualizado com sucesso');
   }
 
   Future<String> deleteCliente(ClienteModel clienteModel) async {

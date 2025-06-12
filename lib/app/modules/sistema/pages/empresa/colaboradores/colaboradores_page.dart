@@ -91,10 +91,12 @@ class _ColaboradoresPageState extends State<ColaboradoresPage> {
                   icon: const Icon(Icons.delete),
                 ),*/
 
-                onTap: () => Modular.to.pushNamed(
+                onTap:
+                    null /* () => Modular.to.pushNamed(
                   '/empresa/colaboradores/detalhes',
                   arguments: data,
-                ),
+                ) */
+                ,
               ),
             ],
           ),

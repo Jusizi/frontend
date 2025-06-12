@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,17 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
 
   late ClientesDetalhesAcoesStore clientesDetalhesAcoesStore;
 
+  TextEditingController enderecoLogradouroController = TextEditingController();
+  TextEditingController enderecoNumeroController = TextEditingController();
+  TextEditingController enderecoComplementoController = TextEditingController();
+  TextEditingController enderecoBairroController = TextEditingController();
+  TextEditingController enderecoCidadeController = TextEditingController();
+  TextEditingController enderecoEstadoController = TextEditingController();
+  TextEditingController enderecoCEPController = TextEditingController();
+
+  TextEditingController whatsappController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -66,6 +78,17 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
   @override
   dispose() {
     clientesDetalhesAcoesStore.destroy();
+    enderecoLogradouroController.dispose();
+    enderecoNumeroController.dispose();
+    enderecoComplementoController.dispose();
+    enderecoBairroController.dispose();
+    enderecoCidadeController.dispose();
+
+    enderecoEstadoController.dispose();
+    enderecoCEPController.dispose();
+    whatsappController.dispose();
+    emailController.dispose();
+
     super.dispose();
   }
 
@@ -94,6 +117,16 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
               clienteModel.enderecos.isNotEmpty ||
               clienteModel.familiares.isNotEmpty;
 
+      enderecoLogradouroController.text = clienteModel.logradouro;
+      enderecoNumeroController.text = clienteModel.numero;
+      enderecoComplementoController.text = clienteModel.complemento;
+      enderecoBairroController.text = clienteModel.bairro;
+      enderecoCidadeController.text = clienteModel.cidade;
+      enderecoEstadoController.text = clienteModel.estado;
+
+      enderecoCEPController.text = clienteModel.cep;
+      whatsappController.text = clienteModel.telefone;
+      emailController.text = clienteModel.email;
       setState(() {});
     });
   }
@@ -174,14 +207,6 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
           icon: const Icon(Icons.edit_outlined),
           label: const Text('Editar'),
         ),
-        TextButton.icon(
-          onPressed: () {
-            SnackBarComponent()
-                .showWarning('"Nada se perde, tudo se transforma."');
-          },
-          icon: const Icon(Icons.delete_outline_outlined),
-          label: const Text('Excluir'),
-        ),
       ],
     );
   }
@@ -207,6 +232,34 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
           //   icon: const Icon(Icons.history_rounded),
           // ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Atualizar os dados do cliente',
+        onPressed: () {
+          clientesStore
+              .updateCliente(
+            cliente!.copyWith(
+              logradouro: enderecoLogradouroController.text,
+              numero: enderecoNumeroController.text,
+              complemento: enderecoComplementoController.text,
+              bairro: enderecoBairroController.text,
+              cidade: enderecoCidadeController.text,
+              estado: enderecoEstadoController.text,
+              cep: enderecoCEPController.text,
+              telefone: whatsappController.text,
+              email: emailController.text,
+            ),
+          )
+              .then((value) {
+            SnackBarComponent().showSuccess(value);
+            Modular.to.popAndPushNamed(
+              '/sistema/clientes/detalhes/${widget.clienteCodigo}',
+            );
+          }).catchError((error) {
+            SnackBarComponent().showError(error.toString());
+          });
+        },
+        child: const Icon(Icons.save_as_rounded),
       ),
       drawer: drawerORleading(),
       body: Visibility(
@@ -238,19 +291,49 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
-                Visibility(
-                  visible: cliente != null && cliente!.telefone.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Whatsapp: ${cliente!.telefone}' : '',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                TextField(
+                  controller: whatsappController,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    TelefoneInputFormatter(),
+                  ],
+                  decoration: InputDecoration(
+                    labelText: 'Whatsapp',
+                    hintText: cliente != null ? cliente!.telefone : '',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(text: cliente!.telefone),
+                        );
+
+                        SnackBarComponent().showSuccess(
+                          'Whatsapp copiado para a área de transferência.',
+                        );
+                      },
+                    ),
                   ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                Visibility(
-                  visible: cliente != null && cliente!.email.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Email: ${cliente!.email}' : '',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                    labelText: 'E-mail',
+                    hintText: cliente != null ? cliente!.email : '',
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(text: cliente!.email),
+                        );
+
+                        SnackBarComponent().showSuccess(
+                          'E-mail copiado para a área de transferência.',
+                        );
+                      },
+                    ),
                   ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 Visibility(
                   visible:
@@ -269,15 +352,51 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.logradouro.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Rua: ${cliente!.logradouro}' : '',
+                  child: TextField(
+                    controller: enderecoLogradouroController,
+                    decoration: InputDecoration(
+                      labelText: 'Logradouro',
+                      hintText: cliente != null ? cliente!.logradouro : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.logradouro),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'Logradouro copiado para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.numero.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Número: ${cliente!.numero}' : '',
+                  child: TextField(
+                    controller: enderecoNumeroController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: 'Número',
+                      hintText: cliente != null ? cliente!.numero : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.numero),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'Número copiado para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -292,29 +411,101 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.bairro.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Bairro: ${cliente!.bairro}' : '',
+                  child: TextField(
+                    controller: enderecoBairroController,
+                    decoration: InputDecoration(
+                      labelText: 'Bairro',
+                      hintText: cliente != null ? cliente!.bairro : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.bairro),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'Bairro copiado para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.cidade.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Cidade: ${cliente!.cidade}' : '',
+                  child: TextField(
+                    controller: enderecoCidadeController,
+                    decoration: InputDecoration(
+                      labelText: 'Cidade',
+                      hintText: cliente != null ? cliente!.cidade : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.cidade),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'Cidade copiada para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.estado.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'Estado: ${cliente!.estado}' : '',
+                  child: TextField(
+                    controller: enderecoEstadoController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[A-Z,a-z]')),
+                      LengthLimitingTextInputFormatter(2),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: 'Estado',
+                      hintText: cliente != null ? cliente!.estado : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.estado),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'Estado copiado para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 Visibility(
                   visible: cliente != null && cliente!.cep.isNotEmpty,
-                  child: SelectableText(
-                    cliente != null ? 'CEP: ${cliente!.cep}' : '',
+                  child: TextField(
+                    controller: enderecoCEPController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      CepInputFormatter(),
+                    ],
+                    decoration: InputDecoration(
+                      labelText: 'CEP',
+                      hintText: cliente != null ? cliente!.cep : '',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.copy),
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(text: cliente!.cep),
+                          );
+
+                          SnackBarComponent().showSuccess(
+                            'CEP copiado para a área de transferência.',
+                          );
+                        },
+                      ),
+                    ),
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
@@ -625,6 +816,9 @@ class _ClientesDetalhesPageState extends State<ClientesDetalhesPage> {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
                             Text('Processos',
                                 style: Theme.of(context).textTheme.bodyLarge),
                             const Text('Nenhum processo encontrado.'),
