@@ -1,8 +1,13 @@
 import 'package:appjusizi/app/modules/sistema/pages/empresa/colaboradores/colaboradores_novo_page.dart';
 import 'package:appjusizi/app/modules/sistema/pages/empresa/colaboradores/colaboradores_page.dart';
 import 'package:appjusizi/app/modules/sistema/pages/empresa/empresa_store.dart';
+import 'package:appjusizi/app/modules/sistema/pages/tarefas/cadastrar_tarefa_page.dart';
+import 'package:appjusizi/app/modules/sistema/pages/tarefas/tarefas_page.dart';
+import 'package:appjusizi/app/modules/sistema/pages/tarefas/tarefas_store.dart';
 import 'package:appjusizi/app/repositories/empresa/empresa_repository.dart';
 import 'package:appjusizi/app/repositories/empresa/empresa_repository_implementation.dart';
+import 'package:appjusizi/app/repositories/tarefas/tarefas_repository.dart';
+import 'package:appjusizi/app/repositories/tarefas/tarefas_repository_implementation.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../app_module.dart';
@@ -125,6 +130,9 @@ class SistemaModule extends Module {
 
     i.addSingleton<EmpresaRepository>(EmpresaRepositoryImplementation.new);
     i.addSingleton<EmpresaStore>(EmpresaStore.new);
+
+    i.addSingleton<TarefasRepository>(TarefasRepositoryImplementation.new);
+    i.addSingleton<TarefasStore>(TarefasStore.new);
   }
 
   @override
@@ -206,6 +214,11 @@ class SistemaModule extends Module {
       '/empresa/colaboradores/cadastro',
       child: (context) => const ColaboradoresNovoPage(),
     );
+
+    // TAREFAS
+    r.child('/tarefas', child: (context) => const TarefasPage());
+    r.child('/tarefas/cadastrar',
+        child: (context) => const CadastrarTarefaPage());
 
     // CONFIGURAÇÕES
     r.child('/configuracoes', child: (context) => const ConfiguracoesPage());

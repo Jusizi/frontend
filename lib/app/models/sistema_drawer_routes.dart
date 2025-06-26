@@ -11,6 +11,13 @@ class SistemaDrawerRoutes {
     route: '/sistema/',
   );
 
+  final RouteData tarefas = RouteData(
+    icon: const Icon(Icons.task_outlined),
+    title: "Tarefas",
+    subtitle: "Minhas tarefas",
+    route: '/sistema/tarefas',
+  );
+
   final RouteData agenda = RouteData(
     icon: const Icon(Icons.calendar_month_outlined),
     title: "Agenda",
@@ -76,6 +83,7 @@ class SistemaDrawerRoutes {
 
   List<RouteData> get props => [
         inicio,
+        tarefas,
         agenda,
         //  contratos,
         contasBancarias,
