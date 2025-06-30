@@ -82,7 +82,7 @@ jobs:
       # Envia os arquivos para o servidor via SSH
       - name: Deploy to server via SSH
         run: |
-          rsync -avz --delete ./build/web/ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
+          rsync -avz --delete -e 'ssh -T' ./build/web/ root@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
 
       # Limpar cache do Cloudflare (CDN + DNS)
       - name: Clear Cloudflare Cache (CDN + DNS)
