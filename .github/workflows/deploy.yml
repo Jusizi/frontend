@@ -62,7 +62,7 @@ jobs:
       # Cria um backup antes do deploy
       - name: Backup current version
         run: |
-          ssh root@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
             # Verifica se o diretório de backups existe e lista os backups existentes
             backups_dir="${{ secrets.PATH_BACKUPS }}"
             backup_files=$(ls -t $backups_dir/web-*.tar.gz)
