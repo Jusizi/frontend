@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main       # Deploy para produção
-      - develop    # Deploy para staging
+      - develop    # Deploy para staging teste
 
 jobs:
   build:
