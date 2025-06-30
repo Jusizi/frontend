@@ -23,7 +23,6 @@ jobs:
 
       - name: Build Flutter Web
         run: flutter build web --release
-
       - name: Install Wrangler CLI
         run: npm install -g wrangler
 
@@ -34,8 +33,7 @@ jobs:
             --branch main
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-
+          
       - name: Notify success
         if: success()
         run: |
