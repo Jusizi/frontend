@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy to Cloudflare Pages
         run: |
-          wrangler pages deploy ./build/web \
+          wrangler pages deploy ./cloudflare-pages \
             --project-name ${{ secrets.CLOUDFLARE_PAGES_PROJECT }} \
             --branch main
         env:
