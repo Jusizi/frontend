@@ -1,114 +1,51 @@
-name: Build and Deploy Flutter Web
+name: Build and Deploy Flutter Web to Cloudflare Pages
 
 on:
   push:
     branches:
-      - main       # Deploy para produção
-      - develop    # Deploy para staging teste
+      - main
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Verifica o código do repositório
-      - name: Check out the repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Configura o Flutter no ambiente
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.29.0'
 
-      # Configura o cache das dependências
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-flutter-${{ hashFiles('pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
-      # Instala dependências do Flutter
       - name: Install dependencies
         run: flutter pub get
 
-      # Verifica a qualidade do código
-      - name: Analyze code with Flutter Analyzer
-        run: flutter analyze
+      - name: Build Flutter Web
+        run: flutter build web --release
 
-      # Executa os testes automatizados
-      - name: Run Flutter tests
-        run: flutter test
+      - name: Install Wrangler CLI
+        run: npm install -g wrangler
 
-      # Realiza o build para web (apenas se os testes passarem)
-      - name: Build Flutter web
-        run: flutter build web --release --no-tree-shake-icons --dart-define=baseUrlAPI=${{ secrets.BASE_URL_API }} --dart-define=baseUrlAUTH=${{ secrets.BASE_URL_AUTH }}
-        if: success()
-
-      # Configura a chave SSH
-      - name: Setup SSH Key
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      # Adiciona o servidor ao arquivo known_hosts
-      - name: Setup SSH Host
+      - name: Deploy to Cloudflare Pages
         run: |
-          mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          wrangler pages deploy ./build/web \
+            --project-name ${{ secrets.CLOUDFLARE_PAGES_PROJECT }} \
+            --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      # Cria um backup antes do deploy
-      - name: Backup current version
-        run: |
-          ssh ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
-            # Verifica se o diretório de backups existe e lista os backups existentes
-            backups_dir="${{ secrets.PATH_BACKUPS }}"
-            backup_files=$(ls -t $backups_dir/web-*.tar.gz)
-            count=$(echo "$backup_files" | wc -l)
-            
-            # Se houver 3 ou mais backups, remove os mais antigos
-            if [ "$count" -ge 3 ]; then
-              backups_to_remove=$(echo "$backup_files" | tail -n +3)  # Pega os backups antigos
-              echo "$backups_to_remove" | xargs rm -f  # Remove os backups antigos
-            fi
-      
-            # Cria o novo backup
-            tar -czf $backups_dir/web-$(date +%Y%m%d%H%M%S).tar.gz -C /home/appjusizi dist
-          EOF
-        if: success()
-
-      # Envia os arquivos para o servidor via SSH
-      - name: Deploy to server via SSH
-        run: |
-          rsync -avz --delete -e 'ssh -T' ./build/web/ ubuntu@${{ secrets.SERVER_IP }}:${{ secrets.DEPLOY_PATH }}
-
-      # Limpar cache do Cloudflare (CDN + DNS)
-      - name: Clear Cloudflare Cache (CDN + DNS)
-        run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          -d '{"purge_everything":true}'
-
-      # Envia notificação ao Discord (Sucesso)
       - name: Notify success
         if: success()
         run: |
           curl -X POST -H "Content-Type: application/json" \
-          -d '{"content": "✅ Deploy realizado com sucesso no GitHub pages!"}' \
+          -d '{"content": "✅ Deploy do Flutter Web para o Cloudflare Pages finalizado com sucesso!"}' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      # Envia notificação ao Discord (Falha)
       - name: Notify failure
         if: failure()
         run: |
-          if [ -s $GITHUB_WORKSPACE/build.log ]; then
-            error_output=$(cat $GITHUB_WORKSPACE/build.log)
-          else
-            error_output="Log indisponível ou vazio."
-          fi
           curl -X POST -H "Content-Type: application/json" \
-          -d "{\"content\": \"❌ Deploy falhou. Verifique os logs!\n\nSaída do erro:\n$error_output\"}" \
+          -d '{"content": "❌ O deploy do Flutter Web falhou. Verifique os logs no GitHub Actions!"}' \
           ${{ secrets.DISCORD_WEBHOOK_URL }}

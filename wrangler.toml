@@ -1,0 +1,4 @@
+name = "flutter-web-deploy"
+account_id = "ac2eb7e5c09270f176d3958a5550eee0"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "./build/web"
