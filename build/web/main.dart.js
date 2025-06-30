@@ -10073,7 +10073,7 @@ aG6:function aG6(){},
 aG7:function aG7(){},
 aG5:function aG5(){},
 c7t(){var s=new A.G4()
-s.a=new A.a6p(A.bMO(null),"http://auth.jusizi.com.br/")
+s.a=new A.a6p(A.bMO(null),"https://auth.jusizi.com.br/")
 return s},
 G4:function G4(){this.a=$},
 aHh:function aHh(){},
@@ -79263,7 +79263,7 @@ return A.q($async$iU,r)}}
 A.lp.prototype={
 gzN(){var s,r=$.H
 if(r==null)r=$.H=$.aj().a5(0,t.I)
-r=A.bMO(A.bLZ("http://api.jusizi.com.br",A.U(["Content-Type","application/json","Authorization","Bearer "+r.a5(0,t.YS).Q],t.N,t.z),!0))
+r=A.bMO(A.bLZ("https://api.jusizi.com.br",A.U(["Content-Type","application/json","Authorization","Bearer "+r.a5(0,t.YS).Q],t.N,t.z),!0))
 s=r.ayu$
 s.E(s,new A.ads(new A.aNf(),new A.aNg(),new A.aNh(),null,null,null))
 return r},
